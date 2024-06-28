@@ -1,6 +1,4 @@
 from parser import parser
-import psutil
-import multiprocessing
 
 
 def compare(source: str, target: str):
@@ -31,7 +29,8 @@ def contains(source: str, target: str) -> float:
 
 def preprocessing(source: str, HanLP, form: str, whitelist: set) -> (list, bool):
     parsed_1 = HanLP(source)
-    tokens_coarse: list = parsed_1[form]
+    print(parsed_1)
+    tokens_coarse: list = parsed_1['tok/fine']
     tokens_ctb: list = parsed_1['pos/ctb']
     # tokens_ner: list = parsed_1['ner/msra']
     contains_website = False
@@ -41,17 +40,6 @@ def preprocessing(source: str, HanLP, form: str, whitelist: set) -> (list, bool)
         elif tokens_ctb[i] == 'URL':
             tokens_coarse[i] = ''
             contains_website = True
-    # for value in tokens_ner:
-    #     if value[1] == 'WWW':
-    #         contains_website = True
-    #         tokens_coarse.remove(value[0])
-    # tokens_new = []
-    # new_source = new_source.join(tokens_coarse)
-    # new_parsed = HanLP(filter_char(new_source, regrex))
-    # for token in tokens_coarse:
-    #     tokens_new.append(filter_char(token, regrex))
-    # processed_list = [filter_char(token, regrex) for token in tokens_coarse if token not in whitelist and token != '']
-    # return processed_list, contains_website
     new_str = ''
     new_str = new_str.join(tokens_coarse)
     new_list = HanLP(new_str)[form]
@@ -64,13 +52,6 @@ def filter_char(source: str, regrex: str):
     for c in regrex:
         result = source.replace(c, '')
     return result
-
-# def find_censored_websites(websites: list, banned_websites: list):
-#     for website in websites:
-#         for banned_website in banned_websites:
-#             if website == banned_website:
-#                 return True
-#     return False
 
 
 def find_censored_words(tokens: set, blacklist: set, sts):

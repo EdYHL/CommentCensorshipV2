@@ -14,7 +14,7 @@ class Response:
         self.riskTypes = []  # 信息涉嫌的违规类别
         self.replacedResult = ''  # 屏蔽后的字符串
         self.attention = 0  # 是否需要人工处理
-        self.finalResult = 0  # 机器建议处理方式
+        self.finalResult = 0  # 机器的处理方式
 
     def risk_factor(self) -> float:
         value = self.level1 + self.level2 + self.level3 + self.containsWebsite
@@ -60,6 +60,7 @@ class Response:
             self.finalResult = 1
 
     def error(self, msg: str):
+        self.clear()
         self.code = 109
         self.message = msg
 
@@ -86,3 +87,17 @@ class Response:
             result['attention'] = self.attention
         result['finalResult'] = self.finalResult
         return result
+
+    def clear(self):
+        self.code = None  # 返回码
+        self.message = None  # 与返回码对应的信息
+        self.risk = None  # 有无风险
+        self.level1 = None  # 一级风险度
+        self.level2 = None  # 二级风险度
+        self.level3 = None  # 三级风险度
+        self.containsWebsite = None  # 是否包含网站
+        self.details = None  # 匹配到的违禁词汇
+        self.riskTypes = None  # 信息涉嫌的违规类别
+        self.replacedResult = None  # 屏蔽后的字符串
+        self.attention = None  # 是否需要人工处理
+        self.finalResult = None  # 机器建议处理方式
